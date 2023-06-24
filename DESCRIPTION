@@ -1,7 +1,7 @@
 Package: gazeHMM
 Type: Package
 Title: Classify Gaze Data With a Hidden Markov Model
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(person("Malte", "Lüken", email = "malte_lueken@arcor.de", role = c("aut", "cre")), person("Simon", "Kucharsky", role = "ctb"), person("Ingmar", "Visser", role = "ctb"))
 Description: A package for the gazeHMM algorithm that classifies eye-tracking data into eye movement events using a hidden Markov model. Contains the algorithm as well as summary and quality inspection functions.
 License: GPL-3 + file LICENSE
