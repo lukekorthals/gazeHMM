@@ -10,13 +10,14 @@
 #' @param instart Starting values for the initial state model in the hidden Markov model.
 #' @param sf Vector of length two indicating by which factor velocity and acceleration data will be divided.
 #' @param fit.control List of settings for the EM algorithm as returned by \code{\link[depmixS4]{em.control}}.
+#' @param ntimes For fitting multiple trials. See \code{\link[depmixS4]{makeDepmix}}.
 #'
 #' @return An object of class \code{depmix.fitted}.
 #' @import depmixS4
 #' @export
 HMM_classify <- function(data, nstates, respstart, trstart, instart,
                          sf = c(10, 10),
-                         fit.control = em.control(maxit = 5000, random.start = F)) {
+                         fit.control = em.control(maxit = 5000, random.start = F), ntimes = NULL) {
 
   # Downsample velocity and acceleration data
 
@@ -56,12 +57,18 @@ HMM_classify <- function(data, nstates, respstart, trstart, instart,
 
   # Create initial state model
 
-  init <- transInit(~ 1, nstates = nstates, pstart = instart, family = multinomial("identity"), data = data.frame(1))
+  init <- transInit(
+    formula = ~ 1,
+    nstates = nstates,
+    pstart  = instart,
+    family  = multinomial("identity"),
+    data    = if (is.null(ntimes)) data.frame(1) else data.frame(rep(1, length(ntimes)))
+    )
 
 
   # Combine models
 
-  model <- makeDepmix(response = resp, transition = trans, prior = init, homogeneous = F)
+  model <- makeDepmix(response = resp, transition = trans, prior = init, homogeneous = F, ntimes = ntimes)
 
 
   # Fit model

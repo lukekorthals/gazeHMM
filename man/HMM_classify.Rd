@@ -11,7 +11,8 @@ HMM_classify(
   trstart,
   instart,
   sf = c(10, 10),
-  fit.control = em.control(maxit = 5000, random.start = F)
+  fit.control = em.control(maxit = 5000, random.start = F),
+  ntimes = NULL
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ The object must contain the variables \code{vel}, \code{acc}, and \code{angle}.}
 \item{sf}{Vector of length two indicating by which factor velocity and acceleration data will be divided.}
 
 \item{fit.control}{List of settings for the EM algorithm as returned by \code{\link[depmixS4]{em.control}}.}
+
+\item{ntimes}{For fitting multiple trials. See \code{\link[depmixS4]{makeDepmix}}.}
 }
 \value{
 An object of class \code{depmix.fitted}.

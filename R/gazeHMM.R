@@ -27,6 +27,7 @@
 #' @param sf Vector of length two indicating by which factor velocity and acceleration data will be divided.
 #' @param fit.control List of settings for the EM algorithm as returned by \code{\link[depmixS4]{em.control}}.
 #' @param min.sac Minimum saccade duration (in s).
+#' @param ntimes For fitting multiple trials. See \code{\link[depmixS4]{makeDepmix}}.
 #'
 #' @return A list object of class 'gazeHMM' containing four elements:
 #' \describe{
@@ -89,7 +90,7 @@ gazeHMM <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b.wi
                     nstates, respstart, trstart, instart, sf = c(10, 10),
                     random.respstart = T, start.seed = NULL,
                     fit.control = em.control(maxit = 5000, random.start = F),
-                    min.sac = 0.01) {
+                    min.sac = 0.01, ntimes = NULL) {
 
 
   # Check if starting values for response model supplied, generate random starting values if not
@@ -238,7 +239,7 @@ gazeHMM <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b.wi
 
   # Model classification
 
-  model.fit <- HMM_classify(prep, nstates, respstart, trstart, instart, sf, fit.control)
+  model.fit <- HMM_classify(prep, nstates, respstart, trstart, instart, sf, fit.control, ntimes)
 
 
   # Postprocessing

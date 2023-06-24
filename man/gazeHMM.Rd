@@ -25,7 +25,8 @@ gazeHMM(
   random.respstart = T,
   start.seed = NULL,
   fit.control = em.control(maxit = 5000, random.start = F),
-  min.sac = 0.01
+  min.sac = 0.01,
+  ntimes = NULL
 )
 }
 \arguments{
@@ -73,6 +74,8 @@ will be used.}
 \item{fit.control}{List of settings for the EM algorithm as returned by \code{\link[depmixS4]{em.control}}.}
 
 \item{min.sac}{Minimum saccade duration (in s).}
+
+\item{ntimes}{For fitting multiple trials. See \code{\link[depmixS4]{makeDepmix}}.}
 }
 \value{
 A list object of class 'gazeHMM' containing four elements:
