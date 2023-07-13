@@ -27,7 +27,7 @@ preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b
 
   vel <- rep(NA, length(x))
   acc <- rep(NA, length(x))
-  angle <- rep(NA, length(x))
+  direction_deviation <- rep(NA, length(x))
   label <- rep(NA, length(x)) # for blinks
 
 
@@ -120,9 +120,9 @@ preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b
 
   # Calculate direction deviation
 
-  angle[valid] <- calc_direction_deviation(x.va[valid], y.va[valid], t[valid], sampling_rate = fr)
+  direction_deviation[valid] <- calc_direction_deviation(x.va[valid], y.va[valid], t[valid], sampling_rate = fr)
 
-  valid[valid] <- ifelse(is.na(angle[valid]), F, valid[valid])
+  valid[valid] <- ifelse(is.na(direction_deviation[valid]), F, valid[valid])
 
 
   # Print number of excluded frames
@@ -134,12 +134,12 @@ preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b
 
   vel[!valid] <- NA
   acc[!valid] <- NA
-  angle[!valid] <- NA
+  direction_deviation[!valid] <- NA
 
 
   # Combine metrics in output data frame
 
-  output <- data.frame(frame = 1:length(x), x = x.va, y = y.va, t = t, vel, acc, angle, label) # [valid,]
+  output <- data.frame(frame = 1:length(x), x = x.va, y = y.va, t = t, vel, acc, direction_deviation, label) # [valid,]
 
   return(output)
 }
