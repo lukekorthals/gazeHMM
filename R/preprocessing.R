@@ -120,7 +120,7 @@ preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b
 
   # Calculate direction deviation
 
-  angle[valid] <- calc_direction_deviation(x.va[valid], y.va[valid], sampling_rate = fr)
+  angle[valid] <- calc_direction_deviation(x.va[valid], y.va[valid], t[valid], sampling_rate = fr)
 
   valid[valid] <- ifelse(is.na(angle[valid]), F, valid[valid])
 
