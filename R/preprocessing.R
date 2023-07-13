@@ -121,6 +121,7 @@ preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b
   # Calculate direction deviation
 
   direction_deviation[valid] <- calc_direction_deviation(x.va[valid], y.va[valid], t[valid], sampling_rate = fr)
+  angle[valid] <- calc_theta(x.va[valid], y.va[valid]) 
 
   valid[valid] <- ifelse(is.na(direction_deviation[valid]), F, valid[valid])
 
@@ -134,12 +135,13 @@ preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b
 
   vel[!valid] <- NA
   acc[!valid] <- NA
+  angle[!valid] <- NA
   direction_deviation[!valid] <- NA
 
 
   # Combine metrics in output data frame
 
-  output <- data.frame(frame = 1:length(x), x = x.va, y = y.va, t = t, vel, acc, direction_deviation, label) # [valid,]
+  output <- data.frame(frame = 1:length(x), x = x.va, y = y.va, t = t, vel, acc, direction_deviation, angle, label) # [valid,]
 
   return(output)
 }
