@@ -46,3 +46,53 @@ calc_theta <- function(x, y) { # x-pos, y-pos
 
   return(theta.mirrored)
 }
+
+calc_windowed_diff <- function(x, y, window_size, sampling_rate=1000) {
+  # Adjust window size to sampling rate
+  window_size <- as.integer(window_size * sampling_rate / 1000)
+  l = window_size - 1
+  # Calculate direction
+  x_diff <- dplyr::lead(x, l) - x
+  y_diff <- dplyr::lead(y, l) - y
+  for (i in seq(0, l-1)) {
+    j <- length(x)-i
+    x_diff[j] <- dplyr::lead(x[j:length(x)], i) - x[j]
+    y_diff[j] <- dplyr::lead(y[j:length(y)], i) - y[j]
+  }
+  return(list(x_diff, y_diff))
+}
+
+calc_direction <- function(x, y, window_size=16, sampling_rate=1000) {
+  # Calcualtes the direction feature according to Startsev et al. (2018)
+  diffs <- calc_windowed_diff(x, y, window_size=window_size, sampling_rate=sampling_rate)
+  x_diff <- diffs[[1]]
+  y_diff <- diffs[[2]]  
+  direction <- atan2(y_diff, x_diff)
+  return(direction)
+}
+
+calc_direction_deviation <- function(x, y, t, window_size=16, outer_window_size=200, outer_step_size=10, sampling_rate=1000) {
+  # Calculates the std of the deviation between the startsev direction and the direction of
+  # overlapping outer windows
+
+  # Calculate direction
+  direction <- calc_direction(x, y, window_size=window_size, sampling_rate=sampling_rate)
+  # Adjust window size to sampling rate
+  outer_window_size <- as.integer(outer_window_size * sampling_rate / 1000)
+  outer_step_size <- as.integer(outer_step_size * sampling_rate / 1000)
+  l = outer_window_size - 1
+  # Calculate outer window direction
+  outer_window_direction <- calc_direction(x, y, window_size=outer_window_size, sampling_rate=sampling_rate) 
+  # Calculate direction deviation
+  direction_deviation <- c()
+  time = c()
+  for (i in seq(1, length(direction), outer_step_size)) {
+    direction_deviation <- c(direction_deviation, outer_window_direction[i] - direction[i:(i+l)])
+    time <- c(time, t[i:(i+l)])
+  }
+  # calculate standard deviation of direction deviation per time point
+  temp <- aggregate(direction_deviation ~ time, data.frame(time=time, direction_deviation=direction_deviation), sd)
+
+  direction_deviation <- temp$direction_deviation
+  return(direction_deviation)
+}

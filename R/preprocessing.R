@@ -118,9 +118,9 @@ preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b
   valid[valid] <- ifelse(vel[valid] > max.vel | acc[valid] > max.acc, F, valid[valid])
 
 
-  # Calculate angle
+  # Calculate direction deviation
 
-  angle[valid] <- calc_theta(x.va[valid], y.va[valid])
+  angle[valid] <- calc_direction_deviation(x.va[valid], y.va[valid], sampling_rate = fr)
 
   valid[valid] <- ifelse(is.na(angle[valid]), F, valid[valid])
 
