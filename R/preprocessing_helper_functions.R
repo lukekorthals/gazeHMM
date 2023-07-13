@@ -47,6 +47,21 @@ calc_theta <- function(x, y) { # x-pos, y-pos
   return(theta.mirrored)
 }
 
+
+# Function to compute a windowed difference for the x and y signal
+
+#' Calculate Windowed Diff
+#'
+#' Calculates the windowed difference for x and y.
+#'
+#' @param x Numeric vector of x coordinates for each gaze sample.
+#' @param y Numeric vector of y coordinates for each gaze sample.
+#' @param window_size Window size in millisecond to calculate the direction feature.
+#' @param sampling_rate Sampling rate of the eye-tracker (in Hz).
+#'
+#' @return A list containing the x and y difference vectors.
+#' @importFrom dplyr lead lag
+#' @export
 calc_windowed_diff <- function(x, y, window_size, sampling_rate=1000) {
   # Adjust window size to sampling rate
   window_size <- as.integer(window_size * sampling_rate / 1000)
@@ -62,6 +77,21 @@ calc_windowed_diff <- function(x, y, window_size, sampling_rate=1000) {
   return(list(x_diff, y_diff))
 }
 
+
+# Function to compute the direction feature according to Startsev et al. (2018)
+
+#' Calculate Direction Feature
+#'
+#' Calculates the direction feature.
+#'
+#' @param x Numeric vector of x coordinates for each gaze sample.
+#' @param y Numeric vector of y coordinates for each gaze sample.
+#' @param window_size Window size in millisecond to calculate the direction feature.
+#' @param sampling_rate Sampling rate of the eye-tracker (in Hz).
+#'
+#' @return A vector containing direction feature for each sample.
+#' @importFrom dplyr lead lag
+#' @export
 calc_direction <- function(x, y, window_size=16, sampling_rate=1000) {
   # Calcualtes the direction feature according to Startsev et al. (2018)
   diffs <- calc_windowed_diff(x, y, window_size=window_size, sampling_rate=sampling_rate)
@@ -71,6 +101,24 @@ calc_direction <- function(x, y, window_size=16, sampling_rate=1000) {
   return(direction)
 }
 
+
+# Function to compute the direction deviation
+
+#' Calculate Direction Deviation
+#'
+#' Calculates the direction deviation.
+#'
+#' @param x Numeric vector of x coordinates for each gaze sample.
+#' @param y Numeric vector of y coordinates for each gaze sample.
+#' @param t Numeric vector of time for each gaze sample.
+#' @param window_size Window size in millisecond to calculate the direction feature.
+#' @param outer_window_size Window size in millisecond to calculate the outer direction.
+#' @param outer_step_size Step size in millisecond to calculate the outer direction.
+#' @param sampling_rate Sampling rate of the eye-tracker (in Hz).
+#'
+#' @return A vector containing the standard deviation of the direction deviation for each sample (NA for first t < outer_step_size) .
+#' @importFrom dplyr lead lag
+#' @export
 calc_direction_deviation <- function(x, y, t, window_size=16, outer_window_size=200, outer_step_size=10, sampling_rate=1000) {
   # Calculates the std of the deviation between the startsev direction and the direction of
   # overlapping outer windows
