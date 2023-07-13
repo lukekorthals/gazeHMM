@@ -47,7 +47,7 @@ or a logical vector with the same length as \code{x}, \code{y}, and \code{t} ind
 }
 \value{
 A data frame with x and y gaze coordinates in degrees of visual angle, time stamps,
-velocity, accelelration, sample-to-sample angle, and an initial label for each sample.
+velocity, accelelration, direction deviation std, and an initial label for each sample.
 }
 \description{
 Prepares raw gaze data for classification by a hidden Markov model as part of \code{\link{gazeHMM}}.
