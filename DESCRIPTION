@@ -1,4 +1,4 @@
-Package: gazeHMM_luke
+Package: gazeHMM
 Type: Package
 Title: Classify Gaze Data With a Hidden Markov Model
 Version: 0.1.1
