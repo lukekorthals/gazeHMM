@@ -17,7 +17,7 @@
 #' @param sg.length Length of the Savitzky-Golay filter (must be odd).
 #'
 #' @return A data frame with x and y gaze coordinates in degrees of visual angle, time stamps,
-#' velocity, accelelration, sample-to-sample angle, and an initial label for each sample.
+#' velocity, accelelration, direction deviation std, and an initial label for each sample.
 #' @importFrom signal sgolayfilt
 #' @export
 preprocess <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b.win = 0.05,
