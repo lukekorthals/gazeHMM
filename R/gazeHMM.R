@@ -97,28 +97,19 @@ gazeHMM <- function(x, y, t, unit = "px", res, dim, dist, fr, blink = NULL, b.wi
 
   if(missing(respstart)) {
 
-    respstart <- list(fix = list(vel = c(10, 10)/sf[1], acc = c(10, 10)/sf[2], angle = c(0, 2*pi)),
-                      sac = list(vel = c(50, 50)/sf[1], acc = c(50, 50)/sf[2], angle = c(0, 10)),
-                      pso = list(vel = c(50, 50)/sf[1], acc = c(50, 50)/sf[2], angle = c(pi, 10)),
-                      sp = list(vel = c(20, 20)/sf[1], acc = c(20, 20)/sf[2], angle = c(0, 10)),
-                      mic = list(vel = c(20, 20)/sf[1], acc = c(50, 50)/sf[2], angle = c(0, 10)))[1:nstates]
+    respstart <- list(fix = list(vel = c(10, 10)/sf[1], acc = c(10, 10)/sf[2], direc = c(0, 1)),
+                      sac = list(vel = c(50, 50)/sf[1], acc = c(50, 50)/sf[2], direc = c(0, 30)),
+                      pso = list(vel = c(50, 50)/sf[1], acc = c(50, 50)/sf[2], direc = c(0, 30)),
+                      sp = list(vel = c(20, 20)/sf[1], acc = c(20, 20)/sf[2], direc = c(0, 30)),
+                      mic = list(vel = c(20, 20)/sf[1], acc = c(50, 50)/sf[2], direc = c(0, 10)))[1:nstates]
 
     if(random.respstart) {
 
       respstart <- lapply(1:length(respstart), function(x) {
         lapply(1:length(respstart[[x]]), function(y) {
 
-          if(y < 3) {
-
             out <- sapply(respstart[[x]][[y]], gamma_start,
                           seed = start.seed[[x]][[y]])
-
-          } else {
-
-            out <- c(respstart[[x]][[y]][1], gamma_start(respstart[[x]][[y]][2],
-                                                         seed = start.seed[[x]][[y]]))
-
-          }
 
           return(out)
         })

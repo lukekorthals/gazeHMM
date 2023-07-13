@@ -3,7 +3,7 @@
 #' Classifies gaze data into eye movement events by using a hidden Markov model from the package depmixS4.
 #'
 #' @param data Data frame with preprocessed gaze samples as returned by \code{\link{preprocess}}.
-#' The object must contain the variables \code{vel}, \code{acc}, and \code{angle}.
+#' The object must contain the variables \code{vel}, \code{acc}, and \code{direc}.
 #' @param nstates Number of states in the hidden Markov model.
 #' @param respstart Starting values for the response model in the hidden Markov model.
 #' @param trstart Starting values for the transition model in the hidden Markov model.
@@ -33,13 +33,13 @@ HMM_classify <- function(data, nstates, respstart, trstart, instart,
 
   resp <- list(list(gamma2(data$vel, pstart = respstart[[1]][[1]]),
                     gamma2(data$acc, pstart = respstart[[1]][[2]]),
-                    unif(data$angle)))
+                    vMF(data$direc, pstart = respstart[[1]][[3]])))
 
   for (s in 2:nstates) {
 
     resp[[s]] <- list(gamma2(data$vel, pstart = respstart[[s]][[1]]),
                       gamma2(data$acc, pstart = respstart[[s]][[2]]),
-                      vMF(data$angle, pstart = respstart[[s]][[3]]))
+                      vMF(data$direc, pstart = respstart[[s]][[3]]))
 
   }
 

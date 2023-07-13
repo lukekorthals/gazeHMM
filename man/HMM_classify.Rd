@@ -17,7 +17,7 @@ HMM_classify(
 }
 \arguments{
 \item{data}{Data frame with preprocessed gaze samples as returned by \code{\link{preprocess}}.
-The object must contain the variables \code{vel}, \code{acc}, and \code{angle}.}
+The object must contain the variables \code{vel}, \code{acc}, and \code{direc}.}
 
 \item{nstates}{Number of states in the hidden Markov model.}
 
